@@ -1,10 +1,24 @@
 # HOCs vs. Render Props
 
-> This is a talk from the Brisbane React JS meetup, discussing the need for and the difference between those code design patterns. By no means I am trying to say you should only use one over the other etc, I was more hoping to give an educational insight of what these patterns are so you can be your own judge on what you need for your use case
+
+
+> This is a talk from the Brisbane React JS meetup, discussing the need for and the difference between those code design patterns. I am by no means trying to say you should only use one over the other etc, I was more hoping to give an educational insight of what these patterns are so you can be your own judge on what you need for your use case...
+
+
 
 **Understanding this repo**
 
 In this repo you can see the different approaches in `src/App.js` in the different branches (basic setup in master, and then the different design patterns in `01-mixins`, `02-hocs` and `03-render-props` accordingly). In the following I will try to summarize my talk in this readme.
+
+**Getting started**
+
+If you want to run the examples, just change into the branch you want and run:
+
+```bash
+$ yarn && yarn start
+```
+
+
 
 ## Sharing code
 
@@ -74,11 +88,11 @@ const withCounter = Component => class extends Component {
   // NOTE: we need to either manually bind methods now or use arrow
   //  functions to ensure `this` is in the right context
   decrement = () => {
-	this.setState({ counter: this.state.count - 1 });
+    this.setState({ counter: this.state.count - 1 });
   }
   
   increment = () => {
-	this.setState({ counter: this.state.count + 1 });
+    this.setState({ counter: this.state.count + 1 });
   }
   
   render () {
@@ -86,7 +100,7 @@ const withCounter = Component => class extends Component {
       <Component
       	{...this.props}
         counter={{
-		  count: this.state.count,
+          count: this.state.count,
           decrement: this.decrement,
           increment: this.increment
         }}
@@ -117,7 +131,7 @@ Yay, we can share code again! But when you look at this code, you'll quickly see
 2. It is still not clear where `this.props.counter` actually comes from.
 3. Now the composition even happens outside of the component! This makes readability even worse and makes composition still static.
 
-So we solved the mixin problem with ES6 classes, but we still carry around all those other issues. Also we add complexity when it comes to dealing with 
+So we solved the mixin problem with ES6 classes, but we still carry around all those other issues. Also we add complexity when it comes to dealing with HOCs. We need to make sure props are properly passed down, refs are passed on as well to the original component, the display name of the higher order component is set properly for debugging purposes and the static values of the original component are hoisted up, so they can be accessed even after wrapping it, just to name a few. This complexity is not always necessary!
 
 ## Render Props
 
@@ -134,11 +148,11 @@ class Counter extends Component {
   // NOTE: we need to either manually bind methods now or use arrow
   //  functions to ensure `this` is in the right context
   decrement = () => {
-	this.setState({ counter: this.state.count - 1 });
+    this.setState({ counter: this.state.count - 1 });
   }
   
   increment = () => {
-	this.setState({ counter: this.state.count + 1 });
+    this.setState({ counter: this.state.count + 1 });
   }
   
   render () {
@@ -171,7 +185,7 @@ class App extends Component {
 export default App;
 ```
 
-When we look at this code we can see, we solved a bunch of issues:
+When we look at this code we can see that we solved a bunch of issues:
 
 1. There is no potential for collision anymore, since you're not working with props or state, but with variables within the render method. You can call those whatever you want, its up to you not the library anymore.
 2. It is very explicit now, where the variables are coming from. Personally I find this code much more readable and maintainable.
