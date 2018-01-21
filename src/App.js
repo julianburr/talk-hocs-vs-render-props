@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import createClass from 'create-react-class';
 
-const App = createClass({
+const CounterMixin = {
   getInitialState () {
     return { count: 0 };
   },
@@ -12,7 +12,11 @@ const App = createClass({
 
   increase () {
     this.setState({ count: this.state.count + 1 });
-  },
+  }
+};
+
+const App = createClass({
+  mixins: [ CounterMixin ],
 
   render () {
     return (
