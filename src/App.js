@@ -1,32 +1,42 @@
 import React, { Component } from 'react';
-import createClass from 'create-react-class';
 
-const CounterMixin = {
-  getInitialState () {
-    return { count: 0 };
-  },
+const withCounter = (Component) =>
+  class extends Component {
+    state = { count: 0 };
 
-  decrease () {
-    this.setState({ count: this.state.count - 1 });
-  },
+    decrease = () => {
+      this.setState({ count: this.state.count - 1 });
+    };
 
-  increase () {
-    this.setState({ count: this.state.count + 1 });
-  }
-};
+    increase = () => {
+      this.setState({ count: this.state.count + 1 });
+    };
 
-const App = createClass({
-  mixins: [ CounterMixin ],
+    render () {
+      return (
+        <Component
+          {...this.props}
+          counter={{
+            count: this.state.count,
+            decrease: this.decrease,
+            increase: this.increase
+          }}
+        />
+      );
+    }
+  };
 
+class App extends Component {
   render () {
+    const { count, decrease, increase } = this.props.counter;
     return (
       <div>
-        <button onClick={this.decrease}>-</button>
-        <span>{this.state.count}</span>
-        <button onClick={this.increase}>+</button>
+        <button onClick={decrease}>-</button>
+        <span>{count}</span>
+        <button onClick={increase}>+</button>
       </div>
     );
   }
-});
+}
 
-export default App;
+export default withCounter(App);
